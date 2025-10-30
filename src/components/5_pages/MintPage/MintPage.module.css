@@ -1,0 +1,239 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 3rem;
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+  text-shadow: 0 0 20px var(--shadow-glow);
+  letter-spacing: 4px;
+  animation: flicker 3s infinite;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin: 0;
+  letter-spacing: 2px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.mintCard {
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  padding: 2rem;
+  box-shadow: 0 0 30px var(--shadow-glow);
+  margin-bottom: 3rem;
+}
+
+.mintSection h2 {
+  color: var(--text-primary);
+  margin: 0 0 2rem 0;
+  text-align: center;
+  font-size: 2rem;
+  text-shadow: 0 0 10px var(--shadow-glow);
+}
+
+.warningBox {
+  background: rgba(255, 165, 0, 0.1);
+  border: 2px solid orange;
+  color: orange;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.connectPrompt {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}
+
+.amountSelector {
+  margin-bottom: 2rem;
+}
+
+.amountSelector label {
+  display: block;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+}
+
+.inputGroup {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.adjustButton {
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.adjustButton:hover:not(:disabled) {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  box-shadow: 0 0 15px var(--shadow-glow);
+}
+
+.adjustButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.amountInput {
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 2rem;
+  font-family: 'Courier New', Courier, monospace;
+  text-align: center;
+  width: 120px;
+  padding: 0.5rem;
+  font-weight: bold;
+}
+
+.amountInput:focus {
+  outline: none;
+  box-shadow: 0 0 15px var(--shadow-glow);
+}
+
+.costDisplay {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+}
+
+.cost {
+  color: var(--text-primary);
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-shadow: 0 0 10px var(--shadow-glow);
+}
+
+.statusBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(0, 255, 0, 0.05);
+  border: 2px solid var(--border-color);
+  margin-bottom: 1.5rem;
+}
+
+.statusBox p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.errorBox {
+  background: rgba(255, 0, 0, 0.1);
+  border: 2px solid var(--accent-primary);
+  color: var(--accent-primary);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.successBox {
+  background: rgba(0, 255, 0, 0.1);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.txLink {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--text-secondary);
+  text-decoration: underline;
+  font-size: 0.9rem;
+}
+
+.txLink:hover {
+  color: var(--text-primary);
+}
+
+.infoSection {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 2rem;
+  text-align: center;
+}
+
+.infoSection h3 {
+  color: var(--text-primary);
+  margin: 0 0 1rem 0;
+  text-shadow: 0 0 10px var(--shadow-glow);
+}
+
+.infoSection p {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin: 0;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    text-shadow: 0 0 20px var(--shadow-glow);
+  }
+  20%, 24%, 55% {
+    text-shadow: 0 0 30px var(--shadow-glow);
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .mintCard {
+    padding: 1.5rem;
+  }
+
+  .inputGroup {
+    flex-direction: row;
+  }
+
+  .amountInput {
+    width: 100px;
+    font-size: 1.5rem;
+  }
+}
