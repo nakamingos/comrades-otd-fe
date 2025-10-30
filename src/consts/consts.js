@@ -18,6 +18,4 @@ export const SOCIAL_LINKS = {
 // Navigation links
 export const NAV_LINKS = [
   { label: 'Mint', href: '/' },
-  { label: 'About', href: '/about' },
-  { label: 'Team', href: '/team' },
 ];

@@ -2,28 +2,29 @@
   background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
   border: 2px solid var(--border-color);
   color: var(--bg-primary);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Low Blockscript', 'Courier New', Courier, monospace;
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: normal;
   padding: 1rem 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 2px;
-  box-shadow: 0 0 20px var(--shadow-glow);
+  box-shadow: none;
   position: relative;
   overflow: hidden;
+  text-shadow: none;
 }
 
 .mintButton:hover:not(:disabled) {
   background: linear-gradient(135deg, #00ff00 0%, #00ff00 100%);
-  box-shadow: 0 0 30px var(--shadow-glow);
+  box-shadow: none;
   transform: translateY(-2px);
 }
 
 .mintButton:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 0 15px var(--shadow-glow);
+  box-shadow: none;
 }
 
 .mintButton:disabled {

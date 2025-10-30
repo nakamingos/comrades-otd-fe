@@ -8,17 +8,9 @@ export default function Navbar() {
     <nav className={styles.navbar}>
       <div className={styles.container}>
         <Link href="/" className={styles.logo}>
-          <h1>{PROJECT_NAME}</h1>
+          <h1>NoMoreLabs</h1>
         </Link>
         
-        <div className={styles.navLinks}>
-          {NAV_LINKS.map((link) => (
-            <Link key={link.href} href={link.href} className={styles.navLink}>
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
         <div className={styles.walletSection}>
           <ConnectWallet />
         </div>

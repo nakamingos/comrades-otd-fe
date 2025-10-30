@@ -6,11 +6,6 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.container}>
         <div className={styles.section}>
-          <h3>Comrades of the Dead</h3>
-          <p>Ethscriptions - Rise from the grave</p>
-        </div>
-
-        <div className={styles.section}>
           <h4>Links</h4>
           <div className={styles.links}>
             <a href={SOCIAL_LINKS.twitter} target="_blank" rel="noopener noreferrer">
