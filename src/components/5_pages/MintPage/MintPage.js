@@ -16,25 +16,16 @@ export default function MintPage() {
 
   // Rug or Treat button state
   const [rugTreatVisible, setRugTreatVisible] = useState(true);
-  const [rugTreatPosition, setRugTreatPosition] = useState(() => {
-    // Smart initial positioning based on screen aspect ratio
-    if (typeof window !== 'undefined') {
-      const aspectRatio = window.innerWidth / window.innerHeight;
-      if (aspectRatio > 1.8) {
-        // Ultra-wide: position in bottom area to avoid text
-        return { x: 25, y: 90 };
-      } else if (aspectRatio > 1.4) {
-        // Widescreen: position lower and more to the side
-        return { x: 35, y: 88 };
-      }
-    }
-    // Default for mobile/tablet
-    return { x: 50, y: 85 };
-  });
+  const [rugTreatPosition, setRugTreatPosition] = useState({ x: 50, y: 85 });
   const [rugTreatClickCount, setRugTreatClickCount] = useState(0);
   const [isRunningAway, setIsRunningAway] = useState(false);
   const [isPanicking, setIsPanicking] = useState(false);
   const [scrollLocked, setScrollLocked] = useState(true);
+  
+  // Mobile sliding behavior state
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobileSlideCount, setMobileSlideCount] = useState(0);
+  const [isSliding, setIsSliding] = useState(false);
   const rugTreatRef = useRef(null);
   const mouseTimeoutRef = useRef(null);
   const panicTimeoutRef = useRef(null);
@@ -70,6 +61,58 @@ export default function MintPage() {
       setTimeout(() => setError(''), 5000);
     }
   }, [mintError]);
+
+  // Mobile detection and position update
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobileDevice = window.matchMedia('(max-width: 768px) and (pointer: coarse)').matches;
+      setIsMobile(isMobileDevice);
+      
+      // Update position based on screen type
+      const aspectRatio = window.innerWidth / window.innerHeight;
+      let newPosition;
+      
+      if (aspectRatio > 1.8) {
+        // Ultra-wide: position in bottom area to avoid text
+        newPosition = { x: 50, y: 90 };
+      } else if (aspectRatio > 1.4) {
+        // Widescreen: position lower
+        newPosition = { x: 50, y: 88 };
+      } else if (isMobileDevice) {
+        // Mobile phone: move up by button height
+        newPosition = { x: 50, y: 75 };
+      } else {
+        // Default for tablet/other: centered
+        newPosition = { x: 50, y: 85 };
+      }
+      
+      setRugTreatPosition(newPosition);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Reset rug button and scroll lock on page load/refresh
+  useEffect(() => {
+    // Reset all rug button states on page load
+    setRugTreatVisible(true);
+    setScrollLocked(true);
+    setRugTreatClickCount(0);
+    setMobileSlideCount(0);
+    setIsSliding(false);
+    setIsRunningAway(false);
+    setIsPanicking(false);
+    
+    // Force scroll to top on page load
+    window.scrollTo(0, 0);
+    
+    // Prevent scroll restoration
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+  }, []);
 
   // Scroll prevention functions
   const preventScroll = (e) => {
@@ -125,11 +168,59 @@ export default function MintPage() {
     };
   };
 
-  const handleRugTreatClick = () => {
+  const handleRugTreatTouch = (e) => {
+    // Mobile sliding behavior - first 5 touches slide away
+    if (isMobile && mobileSlideCount < 5) {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsSliding(true);
+      setMobileSlideCount(prev => prev + 1);
+      
+      // Calculate polar opposite position with some randomness
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
+      // Current position as percentages
+      const currentX = rugTreatPosition.x;
+      const currentY = rugTreatPosition.y;
+      
+      // Calculate opposite with randomness and bounds checking
+      let oppositeX = 100 - currentX + (Math.random() - 0.5) * 30;
+      let oppositeY = 100 - currentY + (Math.random() - 0.5) * 30;
+      
+      // Ensure button stays within safe bounds (10% to 90%)
+      oppositeX = Math.max(10, Math.min(90, oppositeX));
+      oppositeY = Math.max(15, Math.min(85, oppositeY));
+      
+      // Animate to new position
+      setTimeout(() => {
+        setRugTreatPosition({ x: oppositeX, y: oppositeY });
+        setIsSliding(false);
+      }, 100);
+      
+      return;
+    }
+
+    // If mobile and past 5 slides, treat as click
+    if (isMobile && mobileSlideCount >= 5) {
+      handleRugTreatClick(e);
+    }
+  };
+
+  const handleRugTreatTouchEnd = (e) => {
+    // Prevent any click events from firing after touch
+    if (isMobile && mobileSlideCount < 5) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
+  const handleRugTreatClick = (e) => {
+    // Desktop behavior or mobile after 5 slides
     const newClickCount = rugTreatClickCount + 1;
     setRugTreatClickCount(newClickCount);
 
-    if (newClickCount >= 4) {
+    if (newClickCount >= 4 || mobileSlideCount >= 5) {
       // Final click - unlock scroll, scroll to bottom and hide forever
       setScrollLocked(false);
       setRugTreatVisible(false);
@@ -143,15 +234,15 @@ export default function MintPage() {
       return;
     }
 
-    // Make button disappear and reappear at random position
+    // Make button disappear and reappear at random position (desktop behavior)
     setRugTreatVisible(false);
     
     setTimeout(() => {
       setRugTreatPosition(getRandomPosition());
       setRugTreatVisible(true);
       
-      // Start running away from mouse after appearing
-      if (newClickCount >= 2) {
+      // Start running away from mouse after appearing (desktop only)
+      if (newClickCount >= 2 && !isMobile) {
         setIsRunningAway(true);
         
         // Stop running away after 5 seconds
@@ -165,6 +256,9 @@ export default function MintPage() {
 
 
   useEffect(() => {
+    // Only enable mouse tracking on desktop (not mobile)
+    if (isMobile) return;
+    
     let lastMousePos = { x: 0, y: 0 };
     
     const updateMousePos = (e) => {
@@ -258,7 +352,7 @@ export default function MintPage() {
         }
       };
     }
-  }, [isRunningAway, rugTreatPosition.x, rugTreatPosition.y, isPanicking]);
+  }, [isRunningAway, rugTreatPosition.x, rugTreatPosition.y, isPanicking, isMobile]);
 
   // Scroll lock effect
   useEffect(() => {
@@ -292,7 +386,7 @@ export default function MintPage() {
     }
 
     if (isPaused) {
-      setError('Minting is currently paused');
+      setError('Inscribing is currently paused');
       return;
     }
 
@@ -317,8 +411,15 @@ export default function MintPage() {
   return (
     <div className={styles.container}>
       <div className={styles.banner}>
-        <div className={styles.logoOverlay}>
-          <a href="https://nomorelabs.xyz" target="_blank" rel="noopener noreferrer">
+        <div 
+          className={styles.logoOverlay}
+          onSelectStart={(e) => e.preventDefault()}
+        >
+          <a 
+            href="https://nomorelabs.xyz" 
+            onSelectStart={(e) => e.preventDefault()}
+            onDragStart={(e) => e.preventDefault()}
+          >
             <h1>NoMoreLabs</h1>
           </a>
         </div>
@@ -329,6 +430,12 @@ export default function MintPage() {
           src="/comrades-header.png" 
           alt="Comrades of the Dead" 
           className={styles.bannerImage}
+          onContextMenu={(e) => e.preventDefault()}
+          onDragStart={(e) => e.preventDefault()}
+          onSelectStart={(e) => e.preventDefault()}
+          onTouchStart={(e) => e.preventDefault()}
+          onTouchEnd={(e) => e.preventDefault()}
+          onTouchMove={(e) => e.preventDefault()}
         />
         <div className={styles.bannerOverlay}></div>
         
@@ -336,12 +443,15 @@ export default function MintPage() {
         {rugTreatVisible && (
           <button
             ref={rugTreatRef}
-            className={`${styles.rugTreatButton} ${isPanicking ? styles.panicking : ''}`}
+            className={`${styles.rugTreatButton} ${isPanicking ? styles.panicking : ''} ${isSliding ? styles.sliding : ''}`}
             style={{
               left: `${rugTreatPosition.x}%`,
               top: `${rugTreatPosition.y}%`,
             }}
-            onClick={handleRugTreatClick}
+            onTouchStart={isMobile ? handleRugTreatTouch : undefined}
+            onTouchEnd={isMobile ? handleRugTreatTouchEnd : undefined}
+            onClick={!isMobile ? handleRugTreatClick : (isMobile && mobileSlideCount >= 5 ? handleRugTreatClick : (e) => e.preventDefault())}
+            onContextMenu={(e) => e.preventDefault()}
           >
             Rug or Treat?
           </button>
@@ -363,13 +473,13 @@ export default function MintPage() {
           
           {isPaused && (
             <div className={styles.warningBox}>
-              ⚠️ Minting is currently paused
+              ⚠️ Inscribing is currently paused
             </div>
           )}
 
           {!isConnected ? (
             <div className={styles.connectPrompt}>
-              <p>Connect your wallet to mint</p>
+              <p>Connect your wallet to inscribe</p>
             </div>
           ) : (
             <>
@@ -415,14 +525,6 @@ export default function MintPage() {
           )}
         </div>
       </div>
-
-        <div className={styles.infoSection}>
-          <h3>What are Ethscriptions?</h3>
-          <p>
-            Ethscriptions are a new way of creating digital artifacts on Ethereum using transaction calldata.
-            Each Comrades of the Dead NFT is permanently inscribed on the Ethereum blockchain.
-          </p>
-        </div>
       </div>
     </div>
   );

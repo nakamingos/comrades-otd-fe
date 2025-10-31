@@ -1,5 +1,8 @@
 .container {
   width: 100%;
+  height: fit-content;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .banner {
@@ -10,6 +13,11 @@
   height: 100vh;
   z-index: 1;
   overflow: hidden;
+  /* Prevent text selection in entire banner area */
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .logoOverlay {
@@ -17,6 +25,55 @@
   top: 1rem;
   left: 1rem;
   z-index: 15;
+  /* Allow clicks but prevent text selection */
+  pointer-events: auto;
+}
+
+/* Move logo below connect button on very narrow screens */
+@media (max-width: 480px) {
+  .logoOverlay {
+    top: 4.5rem;
+    left: 1rem;
+    right: 1rem;
+    text-align: center;
+    width: calc(100vw - 2rem);
+    box-sizing: border-box;
+  }
+  
+  .logoOverlay h1 {
+    font-size: min(2.5rem, 12vw) !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    width: 100% !important;
+    transform-origin: center !important;
+    transform: scale(1) !important;
+  }
+}
+
+/* Additional scaling for very narrow screens */
+@media (max-width: 360px) {
+  .logoOverlay h1 {
+    font-size: min(2rem, 11vw) !important;
+  }
+}
+
+/* Extra narrow screens like old phones */
+@media (max-width: 320px) {
+  .logoOverlay h1 {
+    font-size: min(1.8rem, 10vw) !important;
+  }
+}
+
+.logoOverlay a {
+  /* Allow link functionality */
+  pointer-events: auto;
+  /* Prevent text selection on the link itself */
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 255, 0, 0.2);
 }
 
 .logoOverlay a {
@@ -37,6 +94,11 @@
   text-shadow: none;
   font-family: 'Low Blockscript', 'Courier New', Courier, monospace;
   line-height: .8;
+  /* Prevent text selection on the heading */
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .connectOverlay {
@@ -44,6 +106,15 @@
   top: 1rem;
   right: 1rem;
   z-index: 15;
+}
+
+/* Ensure connect button stays at top on narrow screens */
+@media (max-width: 480px) {
+  .connectOverlay {
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 20;
+  }
 }
 
 .bannerImage {
@@ -57,6 +128,19 @@
   position: absolute;
   top: -10%;
   left: -10%;
+  /* Disable image saving and context menu */
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-context-menu: none;
+  user-select: none;
+  pointer-events: none;
+  /* Disable drag and drop */
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  /* Disable text selection and highlighting */
+  -webkit-tap-highlight-color: transparent;
 }
 
 @keyframes pixelMaterialize {
@@ -94,13 +178,12 @@
   position: relative;
   z-index: 10;
   margin-top: 100vh;
-  background: var(--bg-primary);
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
   padding: 2rem;
-  border-top: 2px solid var(--border-color);
-  box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.8);
+  padding-bottom: 0.5rem;
+  min-height: fit-content;
 }
 
 .subtitle {
@@ -122,7 +205,7 @@
   border: 2px solid var(--border-color);
   padding: 2rem;
   box-shadow: 0 0 30px var(--shadow-glow);
-  margin-bottom: 3rem;
+  margin-bottom: 0;
 }
 
 .mintSection h2 {
@@ -277,7 +360,8 @@
 .buttonContainer {
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0;
 }
 
 .infoSection {
@@ -348,28 +432,23 @@
     transform: scale(0.65);
     width: 180%;
     height: 180%;
-    top: -40%;
+    top: -69%;
     left: -40%;
   }
 }
 
 @media (max-width: 480px) {
   .bannerImage {
-    transform: scale(0.6);
+    transform: scale(0.5);
     width: 200%;
     height: 200%;
-    top: -50%;
+    top: -65%;
     left: -50%;
   }
   
-  .connectOverlay {
-    top: 0.5rem;
-    right: 0.5rem;
-  }
-  
-  .logoOverlay {
-    top: 0.5rem;
-    left: 0.5rem;
+  /* Adjust content margin to account for moved logo */
+  .content {
+    margin-top: calc(100vh + 2rem);
   }
 }
 
@@ -377,10 +456,10 @@
 .rugTreatButton {
   position: absolute;
   background: linear-gradient(135deg, #ff6b35, #f7931e);
-  color: white;
+  color: #2B0610;
   border: 4px solid #ff4500;
   padding: 1.8rem 3.6rem;
-  font-size: 2.2rem;
+  font-size: 3.4rem;
   font-weight: bold;
   border-radius: 18px;
   cursor: pointer;
@@ -440,7 +519,57 @@
   75% { transform: translate(-50%, -50%) rotate(2deg); }
 }
 
+/* Mobile sliding animation */
+.rugTreatButton.sliding {
+  animation: slide-away 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
 
+@keyframes slide-away {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  30% {
+    transform: translate(-50%, -50%) scale(0.85);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+
+
+/* Mobile-specific touch improvements */
+@media (max-width: 768px) and (pointer: coarse) {
+  .rugTreatButton {
+    font-size: 2.4rem;
+    padding: 2rem 4rem;
+    border-radius: 18px;
+    /* Prevent text selection and long press behaviors */
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    /* Better touch response - prevent long press */
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-appearance: none;
+    appearance: none;
+    /* Disable context menu */
+    -webkit-context-menu: none;
+    transition: all 0.3s ease, left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), top 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .rugTreatButton:active {
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  
+  /* Disable any hover effects on mobile */
+  .rugTreatButton:hover {
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    box-shadow: 0 12px 45px rgba(255, 107, 53, 0.3);
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
 
 @media (max-width: 768px) {
   .rugTreatButton {
@@ -452,8 +581,12 @@
 
 @media (max-width: 480px) {
   .rugTreatButton {
-    font-size: 1.8rem;
-    padding: 1.2rem 3rem;
+    font-size: 1.6rem;
+    padding: 1rem 2.5rem;
     border-radius: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80vw;
   }
 }

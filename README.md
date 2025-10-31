@@ -98,7 +98,7 @@ Update project details in `src/consts/consts.js`:
 
 The project uses a dark/terminal theme with CSS modules. Main theme variables are in `styles/globals.css`:
 - Primary background: `#0a0a0a`
-- Text color: `#00ff00` (green)
+- Text color: `#00FF22` (green)
 - Accent: `#ff0000` (red)
 
 ## Smart Contract Integration

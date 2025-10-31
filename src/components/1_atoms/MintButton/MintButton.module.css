@@ -1,5 +1,5 @@
 .mintButton {
-  background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+  background: linear-gradient(135deg, #00FF22 0%, #00cc00 100%);
   border: 2px solid var(--border-color);
   color: var(--bg-primary);
   font-family: 'Low Blockscript', 'Courier New', Courier, monospace;
@@ -17,7 +17,7 @@
 }
 
 .mintButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, #00ff00 0%, #00ff00 100%);
+  background: linear-gradient(135deg, #00FF22 0%, #00FF22 100%);
   box-shadow: none;
   transform: translateY(-2px);
 }
