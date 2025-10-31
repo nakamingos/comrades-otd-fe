@@ -6,7 +6,9 @@ import { formatEther } from 'viem';
 export const formatWeiToEth = (wei, decimals = 4) => {
   if (!wei) return '0';
   const eth = formatEther(BigInt(wei));
-  return parseFloat(eth).toFixed(decimals);
+  const formatted = parseFloat(eth).toFixed(decimals);
+  // Remove leading zero from decimal numbers (0.0100 -> .0100)
+  return formatted.replace(/^0(?=\.)/, '');
 };
 
 /**

@@ -3,17 +3,26 @@
   border: 2px solid var(--border-color);
   color: var(--bg-primary);
   font-family: 'Low Blockscript', 'Courier New', Courier, monospace;
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   font-weight: normal;
   padding: 1rem 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 2px;
-  box-shadow: none;
+  box-shadow: 0 0 30px var(--shadow-glow);
   position: relative;
   overflow: hidden;
   text-shadow: none;
+  /* Fixed dimensions to prevent button growth */
+  min-width: 370px;
+  max-width: 370px;
+  min-height: 60px;
+  max-height: 60px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mintButton:hover:not(:disabled) {

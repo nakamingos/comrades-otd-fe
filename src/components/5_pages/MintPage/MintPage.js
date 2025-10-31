@@ -460,8 +460,8 @@ export default function MintPage() {
 
       <div className={styles.content} id="stats-section">
         <div className={styles.statsGrid}>
-        <StatDisplay label="Supply" value={`${formatNumber(minted)} / ${formatNumber(totalSupply)}`} highlight />
         <StatDisplay label="Price" value={`${formatWeiToEth(mintPrice, 4)} ETH`} />
+        <StatDisplay label="FOMO METER" value={`${formatNumber(minted)} / ${formatNumber(totalSupply)}`} highlight />
       </div>
 
       <div className={styles.mintCard}>

@@ -42,8 +42,8 @@ a {
 /* Dark/spooky theme colors */
 :root {
   --bg-primary: #0a0a0a;
-  --bg-secondary: #1a1a1a;
-  --bg-tertiary: #2a2a2a;
+  --bg-secondary: rgba(26, 26, 26, 0.95);
+  --bg-tertiary: rgba(42, 42, 42, 0.95);
   --text-primary: #00FF22;
   --text-secondary: #00cc00;
   --text-muted: #008800;

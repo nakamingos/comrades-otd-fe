@@ -197,7 +197,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 .mintCard {
@@ -224,13 +224,18 @@
   margin-bottom: 1.5rem;
   text-align: center;
   font-weight: bold;
+  font-size: 1.4rem;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .connectPrompt {
   text-align: center;
-  padding: 2rem;
+  padding: 0.25rem 2rem;
   color: var(--text-secondary);
-  font-size: 1.2rem;
+  font-size: 1.8rem;
 }
 
 .amountSelector {
@@ -320,6 +325,7 @@
   background: rgba(0, 255, 0, 0.05);
   border: 2px solid var(--border-color);
   margin-bottom: 1.5rem;
+  box-shadow: 0 0 30px var(--shadow-glow);
 }
 
 .statusBox p {
@@ -343,6 +349,7 @@
   padding: 1rem;
   margin-bottom: 1.5rem;
   text-align: center;
+  box-shadow: 0 0 30px var(--shadow-glow);
 }
 
 .txLink {
@@ -395,6 +402,13 @@
 }
 
 /* Responsive banner scaling - gradual zoom out */
+/* Wide screens - squeeze height slightly */
+@media (min-width: 1400px) {
+  .bannerImage {
+    transform: scaleY(0.92) scaleX(1);
+  }
+}
+
 @media (max-width: 1200px) {
   .bannerImage {
     transform: scale(0.95);
